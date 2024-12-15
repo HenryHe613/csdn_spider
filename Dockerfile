@@ -3,6 +3,7 @@ ARG author="nanyancc"
 
 COPY requirements.txt /tmp/requirements.txt
 
+# python12移除了python3-distutils，而是setuptools
 RUN apt update && apt install -y --no-install-recommends wget unzip libnss3-tools && \
     wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     apt install -y ./google-chrome-stable_current_amd64.deb && \
@@ -15,4 +16,4 @@ RUN apt update && apt install -y --no-install-recommends wget unzip libnss3-tool
     pip install --no-cache-dir -r /tmp/requirements.txt && \
     rm -f /tmp/requirements.txt
 
-ENTRYPOINT ["python"]
+WORKDIR /app
