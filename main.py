@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from undetected_chromedriver import Chrome,ChromeOptions
 from selenium.webdriver.common.keys import Keys
 from fake_useragent import UserAgent
+from markdown import markdown
 
 def handle_sigterm(signum, d):
     print(f"\033[94m[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}]\033[91m[INFO]\033[0m Exit.")
@@ -26,24 +27,28 @@ options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--proxy-server='+os.getenv('HTTP_PROXY'))
 
 driver = Chrome(options=options)
-driver.get('https://blog.csdn.net/m0_71746299/article/details/125856435')
+driver.get('https://blog.csdn.net/zwq912318834/article/details/78626739')
 soup = BeautifulSoup(driver.page_source, 'html.parser')
 title = soup.find('h1', id='articleContentId')
 print(title.text)
 print()
-print(soup.find('div', id='content_views').text)
+print(soup.find('div', class_='tags-box artic-tag-box').text)
 
-with open('/app/temp/htmls/test.html', 'w') as f:
+with open('/app/temp/htmls/test2.html', 'w') as f:
     f.write(driver.page_source)
 
-content_list = soup.find('div', id='content_views').contents
-for i in range(len(content_list)):
-    if content_list[i].name is None:
-        continue
-    print('\033[94m[', i, ']\033[0mlen=', len(content_list[i].text))
-    print('\033[94m[name]\033[0m', content_list[i].name)
-    print('\033[94m[text]\033[0m', content_list[i].text)
-    print('\033[94m[origin]\033[0m', content_list[i])
+
+print(markdown(driver.page_source))
+
+
+# content_list = soup.find('div', id='content_views').contents
+# for i in range(len(content_list)):
+#     if content_list[i].name is None:
+#         continue
+#     print('\033[94m[', i, ']\033[0mlen=', len(content_list[i].text))
+#     print('\033[94m[name]\033[0m', content_list[i].name)
+#     print('\033[94m[text]\033[0m', content_list[i].text)
+#     print('\033[94m[origin]\033[0m', content_list[i])
 
 driver.save_screenshot('/app/temp/screenshots/screenshot.png')
 
